@@ -9,15 +9,23 @@
 
 package com.carefoot.dcalc;
 
+import com.carefoot.dcalc.gui.DCWindow;
+
 public class DerivativeCalculator {
+	
+	private static DCWindow window;
+	private static ComputationHandler handler;
 	
 	// Main method
 	public static void main(String[] args) {
-		
+		setup();
 	}
 	
+	// Runs all necessary startup procedures
 	private static void setup() {
-		
+		handler = new ComputationHandler();
+		window = new DCWindow(handler);
+		window.open();
 	}
 
 }

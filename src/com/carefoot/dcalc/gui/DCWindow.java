@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import com.carefoot.dcalc.ComputationHandler;
+import com.carefoot.dcalc.objects.Expression;
 
 public class DCWindow {
 	
@@ -15,6 +16,7 @@ public class DCWindow {
 	
 	private final int WINDOW_HEIGHT = 200;
 	private final int WINDOW_WIDTH = 500;
+	private final String[] DERIVATION_VARIABLES = {"x","y","z","t"};
 	
 	// Constructor
 	public DCWindow(ComputationHandler handler) {
@@ -24,7 +26,7 @@ public class DCWindow {
 		constructWindow();
 	}
 	
-	// Builds window using Java Swing
+	// Builds window using Java Swing library 
 	private void constructWindow() {
 		
 		window.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -33,26 +35,30 @@ public class DCWindow {
 		layout.setVgap(50);
 		window.getContentPane().setLayout(layout);
 		
-		JLabel text = new JLabel("Please input the equation below. Result will be displayed at the bottom.");
+		JLabel text = new JLabel("Please input derivation variable and equation below.");
 		text.setFont(new Font("Serif", Font.PLAIN, Math.round(14*(WINDOW_WIDTH/500))));
 		window.getContentPane().add(text, BorderLayout.NORTH); // Adds text add top of gui
 		
-		JTextField field = new JTextField("E.g: 3x^2");
+		JTextField field = new JTextField("3x^2");
 		window.getContentPane().add(field, BorderLayout.CENTER); // Adds text field (to center)
 		
+		JComboBox<String> box = new JComboBox<>(DERIVATION_VARIABLES);
+		window.getContentPane().add(box, BorderLayout.WEST); // Adds variable selector
+		
+		JLabel result = new JLabel("Derivative:");
+		window.getContentPane().add(result, BorderLayout.SOUTH); // Adds result text field
+		
 		JButton button = new JButton("Calculate");
-		button.addActionListener(new ActionListener() {
+		button.addActionListener(new ActionListener() { 
 			
 			// Run when "calculate" button is pressed
 			public void actionPerformed(ActionEvent e) {
-				handler.derivative(field.getText());
+				String derivative = handler.computeDerivative(new Expression(field.getText(), (String)box.getSelectedItem()));
+				result.setText("Derivative: " + derivative);
 			}
 			
 		});
 		window.getContentPane().add(button, BorderLayout.EAST); // Adds button
-		
-		JLabel result = new JLabel("Calculated Derivative:");
-		window.getContentPane().add(result, BorderLayout.SOUTH); // Adds result text field
 
 	}
 	
